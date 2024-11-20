@@ -1,0 +1,10 @@
+program TestStringAndMod; // Program sử dụng string và phép toán %
+var
+  myString: string; // Biến kiểu string
+  number: integer;
+
+begin
+  myString := Hello; // Sử dụng dấu nháy đôi cho chuỗi
+  number := 10 % 3; // Tính phần dư
+  // Đây là một dòng comment, không ảnh hưởng đến kết quả
+end.

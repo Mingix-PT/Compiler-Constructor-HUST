@@ -26,6 +26,14 @@ void skipBlank()
     readChar();
 }
 
+void skipSingleLineComment()
+{
+  while (currentChar != EOF && currentChar != '\n')
+  {
+    readChar();
+  }
+}
+
 void skipComment()
 {
   // TODO
@@ -165,12 +173,22 @@ Token *getToken(void)
     token = makeToken(SB_MINUS, lineNo, colNo);
     readChar();
     return token;
-  case CHAR_TIMES:
-    token = makeToken(SB_TIMES, lineNo, colNo);
+  case CHAR_SLASH:
+    readChar();
+    if (charCodes[currentChar] == CHAR_SLASH)
+    {
+      readChar();
+      skipSingleLineComment();
+      return getToken(); // Đọc token tiếp theo sau khi bỏ qua comment
+    }
+    token = makeToken(SB_SLASH, lineNo, colNo);
+    return token;
+  case CHAR_PERCENT:
+    token = makeToken(SB_MOD, lineNo, colNo);
     readChar();
     return token;
-  case CHAR_SLASH:
-    token = makeToken(SB_SLASH, lineNo, colNo);
+  case CHAR_TIMES:
+    token = makeToken(SB_TIMES, lineNo, colNo);
     readChar();
     return token;
   case CHAR_LT:
@@ -211,14 +229,16 @@ Token *getToken(void)
     readChar();
     return token;
   case CHAR_PERIOD:
+    ln = lineNo;
+    cn = colNo;
     readChar();
     if (charCodes[currentChar] == CHAR_RPAR)
     {
-      token = makeToken(SB_RSEL, lineNo, colNo);
+      token = makeToken(SB_RSEL, ln, cn);
       readChar();
       return token;
     }
-    token = makeToken(SB_PERIOD, lineNo, colNo);
+    token = makeToken(SB_PERIOD, ln, cn); // Sửa tại đây
     return token;
   case CHAR_COLON:
     token = makeToken(SB_COLON, lineNo, colNo);
@@ -293,7 +313,9 @@ void printToken(Token *token)
   case TK_EOF:
     printf("TK_EOF\n");
     break;
-
+  case SB_MOD:
+    printf("SB_MOD\n");
+    break;
   case KW_PROGRAM:
     printf("KW_PROGRAM\n");
     break;
@@ -311,6 +333,9 @@ void printToken(Token *token)
     break;
   case KW_CHAR:
     printf("KW_CHAR\n");
+    break;
+  case KW_STRING:
+    printf("KW_STRING\n");
     break;
   case KW_ARRAY:
     printf("KW_ARRAY\n");
