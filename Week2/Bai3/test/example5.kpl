@@ -1,5 +1,5 @@
 Program Example5; (* Factorial *)
-   
+
 Var n : Integer;
     i  : char;
 
