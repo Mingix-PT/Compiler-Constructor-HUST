@@ -1,4 +1,4 @@
-/* 
+/*
  * @copyright (c) 2008, Hedspi, Hanoi University of Technology
  * @author Huu-Duc Nguyen
  * @version 1.0
@@ -63,6 +63,9 @@ void error(ErrorCode err, int lineNo, int colNo) {
     break;
   case ERR_INVALIDSUBDECL:
     printf("%d-%d:%s\n", lineNo, colNo, ERM_INVALIDSUBDECL);
+    break;
+  case ERR_MISSING_COLON:
+    printf("%d-%d:%s\n", lineNo, colNo, ERM_MISSING_COLON);
     break;
   }
   exit(0);

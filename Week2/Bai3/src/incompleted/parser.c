@@ -21,6 +21,17 @@ void scan(void) {
   free(tmp);
 }
 
+void checkSpacing(Token *token1, Token *token2, int expectedSpace) {
+  int token1EndCol = token1->colNo + strlen(token1->string);
+  int actualSpace = token2->colNo - token1EndCol;
+
+  if (actualSpace > expectedSpace) {
+    int i = actualSpace - expectedSpace;
+    error(ERR_MISSING_COLON, token2->lineNo, token2->colNo-i);
+    exit(0);
+  }
+}
+
 void eat(TokenType tokenType) {
   if (lookAhead->tokenType == tokenType) {
     printToken(lookAhead);
@@ -127,6 +138,7 @@ void compileVarDecls(void) {
 void compileVarDecl(void) {
   // TODO
   eat(TK_IDENT);
+  checkSpacing(currentToken, lookAhead, 1); // Expecting 1 space
   eat(SB_COLON);
   compileType();
   eat(SB_SEMICOLON);
